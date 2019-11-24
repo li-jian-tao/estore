@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.briup.dao.OrderDao">
+	<select id="findByCustomer" parameterType="com.briup.bean.Customer" resultMap="fo">
+		select o.id oid, o.total ot,ol.id olid, ol.num olnum,b.image bimage,b.`name` bname,b.price bp,c.name cname
+		from `order` o,orderline ol,book b ,category c
+		where o.id=ol.order_id and ol.book_id=b.id and b.category_id=c.id and o.customer_id=#{id}
+	</select>
+	<resultMap type="com.briup.bean.Order" id="fo">
+		<id column="oid" property="id"/>
+		<result column="ot" property="total"/>
+		<collection property="lines" javaType="com.briup.bean.OrderLine">
+		<result column="olid" property="id"/>
+		<result column="olnum" property="num"/>
+		<result column="bimage" property="book.image"/>
+		<result column="bname" property="book.name"/>
+		<result column="bp" property="book.price"/>
+		<result column="cname" property="book.category.name"/>
+		</collection>
+		
+	</resultMap>
+	
+	<insert id="saveOrder" parameterType="com.briup.bean.Order">
+		insert into `order`(total,orderDate,customer_id) values(#{total},#{orderDate},#{customer.id})
+	</insert>
+	
+	<select id="findAllOrders" resultMap="os">
+		select id,customer_id from `order`
+	</select>
+	<resultMap type="com.briup.bean.Order" id="os">
+		<id column="id" property="id"/>
+		<result column="customer_id" property="customer.id"/>
+	</resultMap>
+</mapper>

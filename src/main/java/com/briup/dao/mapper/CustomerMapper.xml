@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.briup.dao.CustomerDao">
+	<!-- 登陆查询 -->
+	<select id="findByUsername" resultType="com.briup.bean.Customer">
+		select * from customer where username=#{param}
+	</select>
+	
+	<!-- 注册 -->
+	<insert id="saveCustomer" parameterType="com.briup.bean.Customer">
+		insert into customer(username,password,zip,address,phone,email) values(#{username},#{password},#{zip},#{address},#{phone},#{email})
+	</insert>
+	<!-- 重名查询 -->
+	<select id="regFind" resultType="com.briup.bean.Customer">
+		select username,password from customer where username=#{param}
+	</select>
+	
+	<update id="updateCustomer" parameterType="com.briup.bean.Customer">
+		update customer
+		set username=#{username},password=#{password},zip=#{zip},address=#{address},phone=#{phone},email=#{email}
+		where  username=#{username}
+	</update>
+	
+</mapper>
